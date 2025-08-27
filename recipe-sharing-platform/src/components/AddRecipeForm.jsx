@@ -3,13 +3,11 @@ import React, { useState } from "react";
 function AddRecipeForm() {
   const [title, setTitle] = useState("");
   const [ingredients, setIngredients] = useState("");
-  const [steps, setSteps] = useState(""); // renamed from instructions
+  const [steps, setSteps] = useState("");
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Validation
+  // ✅ Separate validate function
+  const validate = () => {
     const newErrors = {};
     if (!title.trim()) newErrors.title = "Title is required";
     if (!ingredients.trim()) newErrors.ingredients = "Ingredients are required";
@@ -18,9 +16,16 @@ function AddRecipeForm() {
     if (ingredients.split(",").length < 2)
       newErrors.ingredients = "Please add at least 2 ingredients, separated by commas";
 
-    setErrors(newErrors);
+    return newErrors;
+  };
 
-    if (Object.keys(newErrors).length === 0) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const validationErrors = validate();
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
       const newRecipe = {
         title,
         ingredients: ingredients.split(",").map((item) => item.trim()),
@@ -29,7 +34,6 @@ function AddRecipeForm() {
 
       console.log("Submitted recipe:", newRecipe);
 
-      // Reset form
       setTitle("");
       setIngredients("");
       setSteps("");
