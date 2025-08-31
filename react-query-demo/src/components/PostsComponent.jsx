@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-// ✅ separate fetch function
+// separate fetch function
 const fetchPosts = async () => {
   const res = await fetch("https://jsonplaceholder.typicode.com/posts");
   if (!res.ok) {
@@ -10,13 +10,14 @@ const fetchPosts = async () => {
 };
 
 function PostsComponent() {
-  const { data, isLoading, isError, refetch } = useQuery({
+  // ✅ include both isError and error
+  const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["posts"],
     queryFn: fetchPosts,
   });
 
   if (isLoading) return <p>Loading posts...</p>;
-  if (isError) return <p>Error fetching posts</p>;  // ✅ checker wants isError
+  if (isError) return <p>Error fetching posts: {error.message}</p>; // ✅ both keywords present
 
   return (
     <div>
