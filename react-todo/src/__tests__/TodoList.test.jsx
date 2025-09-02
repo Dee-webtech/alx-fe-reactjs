@@ -1,9 +1,12 @@
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import TodoList from '../components/TodoList';
 
 test('renders initial todos', () => {
   render(<TodoList />);
   expect(screen.getByText(/Sample Todo 1/i)).toBeInTheDocument();
+  expect(screen.getByText(/Sample Todo 2/i)).toBeInTheDocument();
 });
 
 test('can add a new todo', () => {

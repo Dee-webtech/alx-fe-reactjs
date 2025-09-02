@@ -1,17 +1,18 @@
-import { useState } from "react";
+import React, { useState } from 'react';
 
-function TodoList() {
+export default function TodoList() {
   const [todos, setTodos] = useState([
-    { id: 1, text: "Learn React", completed: false },
-    { id: 2, text: "Build a Todo App", completed: false },
+    { id: 1, text: 'Sample Todo 1', completed: false },
+    { id: 2, text: 'Sample Todo 2', completed: false },
   ]);
-  const [newTodo, setNewTodo] = useState("");
+
+  const [newTodo, setNewTodo] = useState('');
 
   const addTodo = (e) => {
     e.preventDefault();
     if (!newTodo.trim()) return;
     setTodos([...todos, { id: Date.now(), text: newTodo, completed: false }]);
-    setNewTodo("");
+    setNewTodo('');
   };
 
   const toggleTodo = (id) => {
@@ -31,26 +32,25 @@ function TodoList() {
       <h2>Todo List</h2>
       <form onSubmit={addTodo}>
         <input
+          placeholder="Add a new todo"
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
-          placeholder="Add new todo"
         />
-        <button type="submit">Add</button>
+        <button>Add</button>
       </form>
-
       <ul>
         {todos.map((todo) => (
           <li
             key={todo.id}
-            style={{
-              textDecoration: todo.completed ? "line-through" : "none",
-              cursor: "pointer",
-            }}
             onClick={() => toggleTodo(todo.id)}
+            className={todo.completed ? 'completed' : ''}
           >
             {todo.text}
-            <button onClick={(e) => { e.stopPropagation(); deleteTodo(todo.id); }}>
-              ❌
+            <button
+              data-testid={`delete-${todo.text}`}
+              onClick={() => deleteTodo(todo.id)}
+            >
+              Delete
             </button>
           </li>
         ))}
@@ -58,5 +58,3 @@ function TodoList() {
     </div>
   );
 }
-
-export default TodoList;
